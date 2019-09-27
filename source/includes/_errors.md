@@ -1,22 +1,47 @@
 # Errors
 
-<aside class="notice">
-This error section is stored in a separate file in <code>includes/_errors.md</code>. Slate allows you to optionally separate out your docs into many files...just save them to the <code>includes</code> folder and add them to the top of your <code>index.md</code>'s frontmatter. Files are included in the order listed.
-</aside>
+> HTTP Response for when exceeding bulk limit
 
-The Kittn API uses the following error codes:
+```javascript
+// header
+HTTP/1.1 400 Bad Request
+Content-Type: application/json; charset=utf-8
+Date: Wed, 26 Apr 2017 08:20:47 GMT
+
+// body
+{
+  "bulkItemLimitExceeded": true
+}
+```
+
+Normally errors are identified by an error HTTP status code.
+
+> HTTP Response for partially successful bulk request
+
+```javascript
+// header
+HTTP/1.1 200 OK
+Content-Type: application/json; charset=utf-8
+Date: Wed, 26 Apr 2017 08:20:47 GMT
+
+// body
+{
+  "id":    
+  [
+    "49584134327499146337076065330038012842683545324179423234",
+    null
+  ]
+  "error": true,
+  "failures":
+  {
+    "12345":
+    {
+      "retry": true
+    }
+  }
+}
+```
+
+A bulk request can be partially successful.
 
 
-Error Code | Meaning
----------- | -------
-400 | Bad Request -- Your request is invalid.
-401 | Unauthorized -- Your API key is wrong.
-403 | Forbidden -- The kitten requested is hidden for administrators only.
-404 | Not Found -- The specified kitten could not be found.
-405 | Method Not Allowed -- You tried to access a kitten with an invalid method.
-406 | Not Acceptable -- You requested a format that isn't json.
-410 | Gone -- The kitten requested has been removed from our servers.
-418 | I'm a teapot.
-429 | Too Many Requests -- You're requesting too many kittens! Slow down!
-500 | Internal Server Error -- We had a problem with our server. Try again later.
-503 | Service Unavailable -- We're temporarily offline for maintenance. Please try again later.
